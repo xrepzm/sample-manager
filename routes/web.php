@@ -1,16 +1,21 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
+use SampleManager\Models\Request;
+use SampleManager\Models\Sample;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/request-samples/{id}', function ($id) {
+    $request = Request::with('author', 'samples')
+        ->where('id', $id)->get();
+
+    return response()->json(compact('request'));
+});
+
+Route::get('/sample-requests/{id}', function ($id) {
+    $sample = Sample::with('requests')->where('id', $id)->get();
+
+    return response()->json(compact('sample'));
 });
